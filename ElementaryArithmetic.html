@@ -50,7 +50,7 @@ function newQuestion(){
 			result = Math.floor(b / s) * s;
 			break;
 		case 4:
-			document.getElementById("question").innerHTML = Math.floor(b / s) * s + "÷" + s + "=";
+			document.getElementById("question").innerHTML = Math.floor(b / s) * s + "<!--÷-->/" + s + "=";
 			result = Math.floor(b / s);
 	}
 	td+=result.toString().length;

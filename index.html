@@ -97,11 +97,13 @@
         //document.getElementById("msg").innerHTML = ((at <= spd) ? "עלית שלב (בזכות " : "נשארת שלב (בגלל ") + "פער של " + Math.abs((at-spd)/1000) + " שניות)";
         document.getElementById("msg").innerHTML = (at <= spd) ? "עלית שלב" : "נשארת שלב";
         if (at <= spd) {
-          document.getElementById("lvl").innerHTML++;	
+          //document.getElementById("lvl").innerHTML++;	
+          lvl++;
           document.getElementById("start screen").style.color=((lvl+1) % 10==0)?"red":"black";
         }
         if (lvl % 10 > 0) {
-          document.getElementById("spd").innerHTML = Math.round((spd + at) / 2);	 
+          //document.getElementById("spd").innerHTML = Math.round((spd + at) / 2);
+          document.getElementById("spd").innerHTML = (Math.round(((spd + at) / 2)*1000))/1000;	 
         }
         document.getElementById("start screen").style.display="block";
         document.getElementById("start").focus();

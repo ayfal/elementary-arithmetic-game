@@ -86,7 +86,7 @@ function end(){
   document.getElementById("msg").innerHTML = ((at <= spd) ? "עלית שלב (בזכות " : "נשארת שלב (בגלל ") + "פער של " + Math.abs((at-spd)/1000) + " שניות)";
   if (at <= spd) {
     document.getElementById("lvl").innerHTML++;	
-	document.getElementById("start screen").style.color=(lvl % 9==0)?"red":"black";
+	document.getElementById("start screen").style.color=((lvl+1) % 10==0)?"red":"black";
   }
   if (lvl % 10 > 0) {
     document.getElementById("spd").innerHTML = Math.round((spd + at) / 2);	 

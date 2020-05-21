@@ -6,26 +6,22 @@
     <title>Elementary Arithmetic Game</title>
     <style>* {font-size: 125%; text-align: center;}</style>
   </head>
-  <body>
+  <body onload="load()">
+    <p style="text-align:right">עדכון אחרון: 21/5/20</p>
     <ul id="inst" style="text-align:right">
       <li style="text-align:right">מטרת משחק זה היא לאמן אתכם לחשב מהר יותר. סביר להניח שהוא משפר גם זכרון-לטווח-קצר ותיאום-עין-יד.</li>
       <li style="text-align:right">עליכם לפתור נכונה 10 תרגילים אקראיים, במהירות של לפחות שניה לספרה בממוצע.</li>
       <li style="text-align:right">אם מצליחים, עולים שלב. בכל שלב, המספר הכי גדול שיתכן שיהיה בתרגיל הוא מספר השלב.</li>
-      <li style="text-align:right">הממוצע בין המהירות הנדרשת למהירות שהשגתם בפועל, הוא המהירות הנדרשת במשחק הבא. כך שהמהירות הנדרשת היא תמיד בסביבות קצה היכולת שלכם.</li>
-      <li style="text-align:right">כל שלב שמתחלק ב10, הוא שלב אתגרי, בו המהירות לא משתנה, כך שנדרשים יותר נסיונות כדי לצלוח אותו. נסו לעבור שלב כזה כל יום.</li>
-      <li style="text-align:right">השתמשו בשמירה כדי להמשיך כל משחק מהמקום בו עצרתם במקום להתחיל שוב מההתחלה.</li>
+      <li style="text-align:right">הממוצע בין המהירות הנדרשת למהירות שהשגתם בפועל, הוא המהירות הנדרשת במשחק הבא. כך שהמהירות הנדרשת היא תמיד בסביבות קצה היכולת שלכם, ובדרך כלל נדרשים כמה נסיונות כדי לעבור שלב.</li>
+      <li style="text-align:right">כל שלב שמתחלק ב10, הוא שלב אתגרי, בו המהירות לא משתנה, כך שנדרשים יותר נסיונות כדי לצלוח אותו. והא לכם אתגר גדול יותר: נסו לעבור שלב כזה כל יום.</li>
+      <li style="text-align:right">ההתקדמות נשמרת אוטומטית על המחשב שלכם. <button type="button" onclick="del()">למחיקת ההתקדמות לחצו כאן</button></li>
       <li style="text-align:right">למשתמשים במקלדת מומלץ להשתמש במקשי הספרות הימניים המסודרים בצורת ריבוע (NumPad).</li>
     </ul>
     <p id="msg"></p>
-    <div id="start screen">
-      <p>שלב <span id="lvl">1</span></p>
+    <div id="start screen">	  
+      <p>שלב <span id="lvl"></span></p>
       <p>מהירות <span id="spd">1</span></p>
-      <p><button id="start" type="button" onclick="start()">התחל</button></p>
-      <p>
-        <button type="button" onclick="save()">שמור</button>
-        <button type="button" onclick="load()">טען</button>
-        <button type="button" onclick="del()">מחק</button>
-      </p>
+      <p><button id="start" type="button" onclick="start()">התחל</button></p>      
     </div>
     <div id="game screen" style="display:none" dir="ltr"><p><span id="question"></span><input id="answer" type="number" style="text-align:left" value="" oninput="typing(this.value)"></p></div>	
     <!--<p id="spd" style="display:none">1000</p>-->
@@ -95,44 +91,39 @@
         document.getElementById("game screen").style.display="none";
         at = (Math.round((Date.now() - st) / td))/1000;  
         spd = Number(document.getElementById("spd").innerHTML);
-        //document.getElementById("msg").innerHTML = ((at <= spd) ? "עלית שלב (בזכות " : "נשארת שלב (בגלל ") + "פער של " + Math.abs((at-spd)/1000) + " שניות)";
         document.getElementById("msg").innerHTML = (at <= spd) ? "עלית שלב" : "נשארת שלב";
         if (at <= spd) {
           document.getElementById("lvl").innerHTML++;	
           document.getElementById("start screen").style.color=((lvl+1) % 10==0)?"red":"black";
         }
         if (lvl % 10 > 0) {
-          //document.getElementById("spd").innerHTML = Math.round((spd + at) / 2);
           document.getElementById("spd").innerHTML = (Math.round(((spd + at) / 2)*1000))/1000;	 
+        }
+		if (typeof(Storage) !== "undefined") {
+          localStorage.lvl = document.getElementById("lvl").innerHTML;
+          localStorage.spd = document.getElementById("spd").innerHTML;          
+        } else {
+          document.getElementById("msg").innerHTML="אין אפשרות לשמור את ההתקדמות";
         }
         document.getElementById("start screen").style.display="block";
         document.getElementById("start").focus();
       }  
       
-      function save(){
-        if (typeof(Storage) !== "undefined") {
-          localStorage.lvl = document.getElementById("lvl").innerHTML;
-          localStorage.spd = document.getElementById("spd").innerHTML;
-          document.getElementById("msg").innerHTML="המשחק נשמר";
-        } else {
-          document.getElementById("msg").innerHTML="אין אפשרות לשמור";
-        }
-      }
-      
       function load(){
-        if (localStorage.lvl !== "undefined") {
+        if (localStorage.lvl !== undefined) {
           document.getElementById("lvl").innerHTML = localStorage.lvl;
-          document.getElementById("spd").innerHTML = localStorage.spd;
-          document.getElementById("msg").innerHTML="המשחק נטען";
+          document.getElementById("spd").innerHTML = localStorage.spd;          
         } else {
-          document.getElementById("msg").innerHTML="אין אפשרות לטעון";
+          document.getElementById("lvl").innerHTML=1;
+          document.getElementById("spd").innerHTML=1;
         }
       }
       
       function del(){
         localStorage.removeItem("lvl");
         localStorage.removeItem("spd");
-        document.getElementById("msg").innerHTML="השמירה נמחקה";
+        document.getElementById("lvl").innerHTML=1;
+        document.getElementById("spd").innerHTML=1;
       }
     </script>
   </body>

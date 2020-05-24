@@ -10,7 +10,7 @@
     <ul id="inst" style="text-align:right">
       <p style="text-align:right">עדכון אחרון: 21/5/20</p>
       <li style="text-align:right">מטרת משחק זה היא לאמן אתכם לחשב מהר יותר. סביר להניח שהוא משפר גם זכרון-לטווח-קצר ותיאום-עין-יד.</li>
-      <li style="text-align:right">עליכם לפתור נכונה 10 תרגילים אקראיים, במהירות של לפחות שניה לספרה בממוצע.</li>
+      <li style="text-align:right">עליכם לפתור נכונה 10 תרגילים אקראיים, תוך 10 שניות לפחות.</li>
       <li style="text-align:right">אם מצליחים, עולים שלב. בכל שלב, המספר הכי גדול שיתכן שיהיה בתרגיל הוא מספר השלב.</li>
       <li style="text-align:right">הממוצע בין המהירות הנדרשת למהירות שהשגתם בפועל, הוא המהירות הנדרשת במשחק הבא. כך שהמהירות הנדרשת היא תמיד בסביבות קצה היכולת שלכם, ובדרך כלל נדרשים כמה נסיונות כדי לעבור שלב.</li>
       <li style="text-align:right">כל שלב שמתחלק ב10, הוא שלב אתגרי, בו המהירות לא משתנה, כך שנדרשים יותר נסיונות כדי לצלוח אותו. והא לכם אתגר גדול יותר: נסו לעבור שלב כזה כל יום.</li>
@@ -25,12 +25,11 @@
     </div>
     <div id="game screen" style="display:none" dir="ltr"><p><span id="question"></span><input id="answer" type="number" style="text-align:left" value="" oninput="typing(this.value)"></p></div>	
     <script>
-      var lvl, st, td, qn, lb, b, s, o, result;
+      var lvl, st, tt, qn, lb, b, s, o, result;
       
       function start(){
         lvl=Number(document.getElementById("lvl").innerHTML); //level
         st=Date.now(); //start time
-        td=0; //total digits
         qn=1; //question number
         document.getElementById("game screen").style.display="block";	
         document.getElementById("answer").focus();
@@ -61,7 +60,6 @@
             document.getElementById("question").innerHTML = Math.floor(b / s) * s + ":" + s + "="; //÷
             result = Math.floor(b / s);
         }
-        td+=result.toString().length;
         document.getElementById("msg").innerHTML ="תרגיל&nbsp;" + qn;
       }
       
@@ -71,7 +69,6 @@
           document.getElementById("answer").value  = "";
           if (question.indexOf("=") == question.length-1) {
             document.getElementById("question").innerHTML +=  result;
-            td -= result.toString().length;
           }
         } else if (answer == result) {
           document.getElementById("answer").value  = "";
@@ -88,15 +85,15 @@
       
       function end(){
         document.getElementById("game screen").style.display="none";
-        at = (Math.round((Date.now() - st) / td))/1000;  
+        tt = (Date.now() - st)/1000; //total time
         spd = Number(document.getElementById("spd").innerHTML);
-        document.getElementById("msg").innerHTML = (at <= spd) ? "עלית שלב" : "נשארת שלב";
-        if (at <= spd) {
+        document.getElementById("msg").innerHTML = (tt <= spd) ? "עלית שלב" : "נשארת שלב";
+        if (tt <= spd) {
           document.getElementById("lvl").innerHTML++;	
           document.getElementById("start screen").style.color=((lvl+1) % 10==0)?"red":"black";
         }
         if (lvl % 10 > 0) {
-          document.getElementById("spd").innerHTML = (Math.round(((spd + at) / 2)*1000))/1000;	 
+          document.getElementById("spd").innerHTML = (Math.round(((spd + tt) / 2)*1000))/1000;	 
         }
 		if (typeof(Storage) !== "undefined") {
           localStorage.lvl = document.getElementById("lvl").innerHTML;
@@ -114,7 +111,7 @@
           document.getElementById("spd").innerHTML = localStorage.spd;          
         } else {
           document.getElementById("lvl").innerHTML=1;
-          document.getElementById("spd").innerHTML=1;
+          document.getElementById("spd").innerHTML=10;
         }
       }
       
@@ -122,7 +119,7 @@
         localStorage.removeItem("lvl");
         localStorage.removeItem("spd");
         document.getElementById("lvl").innerHTML=1;
-        document.getElementById("spd").innerHTML=1;
+        document.getElementById("spd").innerHTML=10;
       }
     </script>
   </body>

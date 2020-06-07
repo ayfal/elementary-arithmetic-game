@@ -37,8 +37,8 @@
       <p><button id="start" type="button" onclick="start()">התחל</button></p>
     </div>
     <div id="game screen" style="display:none" dir="ltr">
-      <div style="background:gray"><p id="timer">זמן</p></div>
-      <div style="background:gray"><p id="questions bar" style="background-color: #4CAF50">שאלות</p></div>
+      <p id="timer">זמן</p>
+      <p id="questions bar" style="background-color: #4CAF50">שאלות</p>
       <p><span id="question"></span><input id="answer" type="number" style="text-align:left" value="" oninput="typing(this.value)"></p>
     </div>
     <script>
@@ -215,22 +215,22 @@
         document.getElementById("msg").innerHTML = (tt <= spd) ? "עלית שלב" : "נשארת שלב";
         if (tt <= spd) {
           document.getElementById("lvl").innerHTML++;
-          if (lvl % 10 == 0) {
+          if (lvl % 1 == 0) {
             msg.innerHTML = "סיימת עשרה שלבים, כל הכבוד! להלן תוצאות המשחקים שלהם";
             document.getElementById("history").style.display = "block";
             for (game in crrntUsr.hstry) {
-              statsBar = document.createElement("p");
-              statsBar.innerHTML = crrntUsr.hstry[game].t + "/" + crrntUsr.hstry[game].s;
-              if (crrntUsr.hstry[game].s > crrntUsr.hstry[game].t) {
-                perc = 100 * crrntUsr.hstry[game].t / crrntUsr.hstry[game].s; //percentage
-                rc = "gray"; //remaining color
-              } else {
-                perc = 100 * crrntUsr.hstry[game].s / crrntUsr.hstry[game].t;
-                rc = "#FF6347";
-              }
-              statsBar.style.background = "linear-gradient(to right, #4CAF50 " + perc + "%, " + rc + " 0%)";
-              statsBar.style.width = 100 * Math.max(crrntUsr.hstry[game].s, crrntUsr.hstry[game].t) / crrntUsr.max + "%";
-              document.getElementById("history").appendChild(statsBar);
+              var outsider=document.createElement("div");
+              var insider=document.createElement("div");
+	          if (crrntUsr.hstry[game].t>crrntUsr.hstry[game].s){			  
+	            outsider.style="background: #FF6347; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.max)+"%";
+		        insider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.hstry[game].t)+"%";
+	          } else {
+	            outsider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.max)+"%";
+		        insider.style="background: #4CAF50; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.hstry[game].s)+"%";
+	          }
+	          insider.innerHTML=crrntUsr.hstry[game].t+"/"+crrntUsr.hstry[game].s;
+              outsider.appendChild(insider);
+              document.getElementById("history").appendChild(outsider);
             }
           }
         }

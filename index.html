@@ -215,7 +215,7 @@
         document.getElementById("msg").innerHTML = (tt <= spd) ? "עלית שלב" : "נשארת שלב";
         if (tt <= spd) {
           document.getElementById("lvl").innerHTML++;
-          if (lvl % 1 == 0) {
+          if (lvl % 10 == 0) {
             msg.innerHTML = "סיימת עשרה שלבים, כל הכבוד! להלן תוצאות המשחקים שלהם";
             document.getElementById("history").style.display = "block";
             for (game in crrntUsr.hstry) {

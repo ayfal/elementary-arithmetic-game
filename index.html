@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="he">
+<html dir="ltr" lang="he">
 
   <head>
     <meta charset="utf-8">
@@ -15,9 +15,9 @@
   </head>
 
   <body onload="populate()">
-    <div id="first">
+    <div id="first" dir="rtl">
       <ul style="text-align:right">
-        <p style="text-align:right">עדכון אחרון: 7/6/20</p>
+        <p style="text-align:right">עדכון אחרון: 15/6/20</p>
         <li style="text-align:right">מטרת משחק זה היא לאמן אתכם לחשב מהר יותר. סביר להניח שהוא משפר גם זכרון-לטווח-קצר ותיאום-עין-יד.</li>
         <li style="text-align:right">עליכם לפתור נכונה 10 תרגילים אקראיים, תוך 10 שניות לפחות.</li>
         <li style="text-align:right">אם מצליחים, עולים שלב. בכל שלב, המספר הכי גדול שיתכן שיהיה בתרגיל הוא מספר השלב.</li>
@@ -25,18 +25,16 @@
         <li style="text-align:right">ההתקדמות נשמרת אוטומטית על המחשב שלכם.</li>
       </ul>
       <label for="users">בחר משתמש:</label>
-      <select name="users" id="users" onchange="load()"></select>
+      <select name="users" id="users" onchange="load()"></select> <span>שלב <span id="lvl"></span> </span><span>מהירות <span id="spd"></span></span>
       <p>ניהול משתמשים:<button type="button" onclick="addInput()">הוסף</button><button type="button" onclick="editInput()">ערוך </button><button type="button" onclick="del()">מחק</button></p>
       <p id="inputForm" style="display:none"><input id="inputValue"></input><button id="submitUsers"></button></p>
     </div>
     <div id="start screen">
       <p id="msg"></p>
-      <div id="history" style="display:none" dir="ltr"></div>
-      <p>שלב <span id="lvl"></span></p>
-      <p>מהירות <span id="spd"></span></p>
+      <div id="history" style="display:none" ></div>
       <p><button id="start" type="button" onclick="start()">התחל</button></p>
     </div>
-    <div id="game screen" style="display:none" dir="ltr">
+    <div id="game screen" style="display:none">
       <p id="timer">זמן</p>
       <p id="questions bar" style="background-color: #4CAF50">שאלות</p>
       <p><span id="question"></span><input id="answer" type="number" style="text-align:left" value="" oninput="typing(this.value)"></p>
@@ -76,6 +74,8 @@
         if (crrntUsr.max == undefined) {
           crrntUsr.max = 0;
         }
+        crrntUsr.lvl=Number(crrntUsr.lvl);
+        crrntUsr.spd=Number(crrntUsr.spd);		
       }
 
       function addInput() {
@@ -98,6 +98,7 @@
           document.getElementById("inputForm").style.display = "none";
           document.getElementById("msg").innerHTML = "המשתמש נוסף";
         } else {
+          document.getElementById("inputForm").style.display = "none";
           document.getElementById("msg").innerHTML = "המשתמש כבר קיים";
         }
       }
@@ -121,6 +122,7 @@
           users.selectedIndex = users.length - 1;
           load();
         } else {
+          document.getElementById("inputForm").style.display = "none";
           document.getElementById("msg").innerHTML = "המשתמש כבר קיים";
         }
       }
@@ -133,18 +135,18 @@
         load();
       }
 
-      function start() {
+      function start() {	  
         document.getElementById("first").style.display = "none";
         document.getElementById("start screen").style.display = "none";
         document.getElementById("history").style.display = "none";
         document.getElementById("history").innerHTML = "";
         document.getElementById("game screen").style.display = "block";
         document.getElementById("answer").focus();
-        lvl = Number(document.getElementById("lvl").innerHTML); //level
+        lvl = Number(crrntUsr.lvl); //level
         st = Date.now(); //start time
         qn = 1; //question number
         newQuestion();
-        spd = Number(document.getElementById("spd").innerHTML) * 1000;
+        spd=Number(crrntUsr.spd)*1000;
         tb = setInterval(timer, 10); //time bar
       }
 
@@ -200,51 +202,65 @@
 
       function end() {        
         tt = (Date.now() - st) / 1000; //total time
-        spd = Number(document.getElementById("spd").innerHTML);
+        spd=crrntUsr.spd;
         crrntUsr.hstry[String(Object.keys(crrntUsr.hstry).length)] = {
           s: spd,
           t: tt
         };
         crrntUsr.max = Math.max(crrntUsr.max, spd, tt);        
         clearInterval(tb);
-		document.getElementById("game screen").style.display = "none";
-		document.getElementById("msg").innerHTML = (tt <= spd) ? "עלית שלב" : "נשארת שלב";        
+        document.getElementById("game screen").style.display = "none";
+        document.getElementById("msg").innerHTML = (tt <= spd) ? "עלית לשלב " + (crrntUsr.lvl+1) : "נשארת בשלב "+ crrntUsr.lvl;
+        var outsider=document.createElement("div");
+        var insider=document.createElement("div");
+        if (tt>spd){			  
+          outsider.style="background: #FF6347; width:100%";
+          insider.style="border-style:solid; width:"+(100*spd/tt)+"%";
+        } else {
+          outsider.style="border-style:solid; width:100%";
+          insider.style="background: #4CAF50; width:"+(100*tt/spd)+"%";
+        }
+        insider.innerHTML="המהירות שלך היתה "+ tt+"/"+spd;
+        outsider.appendChild(insider);
+        document.getElementById("msg").appendChild(outsider);
+        var outsider=document.createElement("div");
+        outsider.style="border-style:solid; background: #ffcc66; width:"+(100*(spd+tt)/(2*Math.max(spd,tt)))+"%";
+        outsider.innerHTML="המהירות החדשה היא " + (Math.round(((spd+tt)/2)*1000))/1000;		
+        document.getElementById("msg").appendChild(outsider);
         document.getElementById("start screen").style.display = "block";        
         document.getElementById("start").focus();
-		if (tt <= spd) {
-          document.getElementById("lvl").innerHTML++;
+        if (tt <= spd) {
+          crrntUsr.lvl++;
           if (lvl % 10 == 0) {
             msg.innerHTML = "סיימת עשרה שלבים, כל הכבוד! להלן תוצאות המשחקים שלהם";
-			document.getElementById("msg").focus();
+            document.getElementById("msg").focus();
             document.getElementById("history").style.display = "block";			
             for (game in crrntUsr.hstry) {
               var outsider=document.createElement("div");
               var insider=document.createElement("div");
-	          if (crrntUsr.hstry[game].t>crrntUsr.hstry[game].s){			  
-	            outsider.style="background: #FF6347; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.max)+"%";
-		        insider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.hstry[game].t)+"%";
-	          } else {
-	            outsider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.max)+"%";
-		        insider.style="background: #4CAF50; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.hstry[game].s)+"%";
-	          }
-	          insider.innerHTML=crrntUsr.hstry[game].t+"/"+crrntUsr.hstry[game].s;
+              if (crrntUsr.hstry[game].t>crrntUsr.hstry[game].s){			  
+                outsider.style="background: #FF6347; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.max)+"%";
+                insider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.hstry[game].t)+"%";
+              } else {
+                outsider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.max)+"%";
+                insider.style="background: #4CAF50; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.hstry[game].s)+"%";
+              }
+              insider.innerHTML=crrntUsr.hstry[game].t+"/"+crrntUsr.hstry[game].s;
               outsider.appendChild(insider);
               document.getElementById("history").appendChild(outsider);			  
             }
-			crrntUsr.hstry = {};
+            crrntUsr.hstry = {};
             crrntUsr.max = 0;
           }
         }
-        document.getElementById("spd").innerHTML = (Math.round(((spd + tt) / 2) * 1000)) / 1000;
-        crrntUsr.lvl = document.getElementById("lvl").innerHTML;
-        crrntUsr.spd = document.getElementById("spd").innerHTML;
+        crrntUsr.spd = (Math.round(((spd + tt) / 2) * 1000)) / 1000;
         if (typeof(Storage) !== "undefined") {
           localStorage[crrntUsrNm] = JSON.stringify(crrntUsr);
         } else {
           document.getElementById("msg").innerHTML = "אין אפשרות לשמור את ההתקדמות";
         }
       }
-
+      
     </script>
   </body>
 

@@ -43,7 +43,7 @@
     </div>
     <script>
       var crrntUsrNm, crrntUsr, tb, spd, lvl, st, tt, qn, lb, b, s, o, result;
-
+      
       function populate() {
         if (localStorage.lvl !== undefined) {
           localStorage.setItem("ראשי", JSON.stringify({
@@ -136,12 +136,8 @@
       function start() {
         document.getElementById("first").style.display = "none";
         document.getElementById("start screen").style.display = "none";
-        if (document.getElementById("history").style.display == "block") {
-          document.getElementById("history").style.display = "none";
-          document.getElementById("history").innerHTML = "";
-          crrntUsr.hstry = {};
-          crrntUsr.max = 0;
-        }
+        document.getElementById("history").style.display = "none";
+        document.getElementById("history").innerHTML = "";
         document.getElementById("game screen").style.display = "block";
         document.getElementById("answer").focus();
         lvl = Number(document.getElementById("lvl").innerHTML); //level
@@ -219,7 +215,8 @@
           document.getElementById("lvl").innerHTML++;
           if (lvl % 10 == 0) {
             msg.innerHTML = "סיימת עשרה שלבים, כל הכבוד! להלן תוצאות המשחקים שלהם";
-            document.getElementById("history").style.display = "block";
+			document.getElementById("msg").focus();
+            document.getElementById("history").style.display = "block";			
             for (game in crrntUsr.hstry) {
               var outsider=document.createElement("div");
               var insider=document.createElement("div");
@@ -232,9 +229,10 @@
 	          }
 	          insider.innerHTML=crrntUsr.hstry[game].t+"/"+crrntUsr.hstry[game].s;
               outsider.appendChild(insider);
-              document.getElementById("history").appendChild(outsider);
-			  document.getElementById("msg").focus();
+              document.getElementById("history").appendChild(outsider);			  
             }
+			crrntUsr.hstry = {};
+            crrntUsr.max = 0;
           }
         }
         document.getElementById("spd").innerHTML = (Math.round(((spd + tt) / 2) * 1000)) / 1000;

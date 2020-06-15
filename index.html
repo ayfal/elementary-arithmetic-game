@@ -5,17 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elementary Arithmetic Game</title>
-    <style>
-      * {
-        
-        
-        text-align: center;
-      }
-
+    <style id="sfs">
+	  * { font-size: 3vw; text-align: center; }
     </style>
   </head>
-<!--font-size: 125%;-->
+<!--font-size: xx-large;
+font-size: 1.2em; -->
   <body onload="populate()">
+    <select onchange="fs(this.value)">
+	  <option value="* { font-size: 3vw; text-align: center; }">3vw</option>
+	  <option value="* { font-size: xx-large; text-align: center; }">xx-large</option>
+	  <option value="* { font-size: 1.2em; text-align: center; }">1.2em</option>
+	</select>
     <div id="first" dir="rtl">
       <ul style="text-align:right">
         <p style="text-align:right">עדכון אחרון: 15/6/20</p>
@@ -36,14 +37,19 @@
       <p><button id="start" type="button" onclick="start()">התחל</button></p>
     </div>
     <div id="game screen" style="display:none">
-      <p id="timer">זמן</p>
+      <!--<p id="timer">זמן</p>-->
+	  <div id="outertimer"><div id="innertimer"></div></div>
       <p id="questions bar" style="background-color: #4CAF50">שאלות</p>
       <p><span id="question"></span><input id="answer" type="number" style="text-align:left" value="" oninput="typing(this.value)"></p>
     </div>
     <script>
       var crrntUsrNm, crrntUsr, tb, spd, lvl, st, tt, qn, lb, b, s, o, result;
       
-      function populate() {
+      function fs(fonsi){
+	  document.getElementById("sfs").innerHTML=fonsi;
+	  }
+	  
+	  function populate() {
         if (localStorage.lvl !== undefined) {
           localStorage.setItem("ראשי", JSON.stringify({
             lvl: localStorage.lvl,
@@ -75,8 +81,8 @@
         if (crrntUsr.max == undefined) {
           crrntUsr.max = 0;
         }
-        crrntUsr.lvl=Number(crrntUsr.lvl);
-        crrntUsr.spd=Number(crrntUsr.spd);		
+		crrntUsr.lvl=Number(crrntUsr.lvl);
+		crrntUsr.spd=Number(crrntUsr.spd);		
       }
 
       function addInput() {
@@ -99,7 +105,7 @@
           document.getElementById("inputForm").style.display = "none";
           document.getElementById("msg").innerHTML = "המשתמש נוסף";
         } else {
-          document.getElementById("inputForm").style.display = "none";
+		  document.getElementById("inputForm").style.display = "none";
           document.getElementById("msg").innerHTML = "המשתמש כבר קיים";
         }
       }
@@ -123,7 +129,7 @@
           users.selectedIndex = users.length - 1;
           load();
         } else {
-          document.getElementById("inputForm").style.display = "none";
+		  document.getElementById("inputForm").style.display = "none";
           document.getElementById("msg").innerHTML = "המשתמש כבר קיים";
         }
       }
@@ -143,7 +149,7 @@
         document.getElementById("history").innerHTML = "";
         document.getElementById("game screen").style.display = "block";
         document.getElementById("answer").focus();
-        lvl = Number(crrntUsr.lvl); //level
+        lvl = Number(crrntUsr.lvl);//level
         st = Date.now(); //start time
         qn = 1; //question number
         newQuestion();
@@ -173,12 +179,11 @@
             document.getElementById("question").innerHTML = Math.floor(b / s) * s + ":" + s + "="; //÷
             result = Math.floor(b / s);
         }
-        document.getElementById("questions bar").style.width = 10 * (11 - qn) + '%';
+        document.getElementById("questions bar").style.width = 10 * qn + '%';
       }
 
       function timer() {
-        document.getElementById("timer").style.backgroundColor = (Date.now() - st > spd) ? "#FF6347" : "#4CAF50";
-        document.getElementById("timer").style.width = Math.abs(100 * ((spd - (Date.now() - st)) / spd)) + '%';
+        timebar(outertimer,innertimer,Date.now() - st,spd,"זמן");
       }
 
       function typing(answer) {
@@ -210,47 +215,40 @@
         };
         crrntUsr.max = Math.max(crrntUsr.max, spd, tt);        
         clearInterval(tb);
-        document.getElementById("game screen").style.display = "none";
-        document.getElementById("msg").innerHTML = (tt <= spd) ? "עלית לשלב " + (crrntUsr.lvl+1) : "נשארת בשלב "+ crrntUsr.lvl;
-        var outsider=document.createElement("div");
+		document.getElementById("game screen").style.display = "none";
+		document.getElementById("msg").innerHTML = (tt <= spd) ? "עלית לשלב " + (crrntUsr.lvl+1) : "נשארת בשלב "+ crrntUsr.lvl;
+		var outsider=document.createElement("div");
         var insider=document.createElement("div");
-        if (tt>spd){			  
-          outsider.style="background: #FF6347; width:100%";
-          insider.style="border-style:solid; width:"+(100*spd/tt)+"%";
-        } else {
-          outsider.style="border-style:solid; width:100%";
-          insider.style="background: #4CAF50; width:"+(100*tt/spd)+"%";
-        }
-        insider.innerHTML="המהירות שלך היתה "+ tt+"/"+spd;
+        timebar(outsider,insider,tt,spd,"המהירות שלך היתה " + tt + "/" + spd);
         outsider.appendChild(insider);
-        document.getElementById("msg").appendChild(outsider);
-        var outsider=document.createElement("div");
+		document.getElementById("msg").appendChild(outsider);
+		var outsider=document.createElement("div");
         outsider.style="border-style:solid; background: #ffcc66; width:"+(100*(spd+tt)/(2*Math.max(spd,tt)))+"%";
         outsider.innerHTML="המהירות החדשה היא " + (Math.round(((spd+tt)/2)*1000))/1000;		
-        document.getElementById("msg").appendChild(outsider);
+		document.getElementById("msg").appendChild(outsider);
         document.getElementById("start screen").style.display = "block";        
         document.getElementById("start").focus();
-        if (tt <= spd) {
+		if (tt <= spd) {
           crrntUsr.lvl++;
           if (lvl % 10 == 0) {
             msg.innerHTML = "סיימת עשרה שלבים, כל הכבוד! להלן תוצאות המשחקים שלהם";
-            document.getElementById("msg").focus();
+			document.getElementById("msg").focus();
             document.getElementById("history").style.display = "block";			
             for (game in crrntUsr.hstry) {
               var outsider=document.createElement("div");
               var insider=document.createElement("div");
-              if (crrntUsr.hstry[game].t>crrntUsr.hstry[game].s){			  
-                outsider.style="background: #FF6347; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.max)+"%";
-                insider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.hstry[game].t)+"%";
-              } else {
-                outsider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.max)+"%";
-                insider.style="background: #4CAF50; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.hstry[game].s)+"%";
-              }
-              insider.innerHTML=crrntUsr.hstry[game].t+"/"+crrntUsr.hstry[game].s;
+	          if (crrntUsr.hstry[game].t>crrntUsr.hstry[game].s){			  
+	            outsider.style="background: #FF6347; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.max)+"%";
+		        insider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.hstry[game].t)+"%";
+	          } else {
+	            outsider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.max)+"%";
+		        insider.style="background: #4CAF50; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.hstry[game].s)+"%";
+	          }
+	          insider.innerHTML=crrntUsr.hstry[game].t+"/"+crrntUsr.hstry[game].s;			  
               outsider.appendChild(insider);
               document.getElementById("history").appendChild(outsider);			  
             }
-            crrntUsr.hstry = {};
+			crrntUsr.hstry = {};
             crrntUsr.max = 0;
           }
         }
@@ -261,7 +259,17 @@
           document.getElementById("msg").innerHTML = "אין אפשרות לשמור את ההתקדמות";
         }
       }
-      
+	  
+	  function timebar(po,pi,pt,ps,pm){
+	    if (pt>ps){			  
+          po.style="background: #FF6347; width:100%";
+	      pi.style="border-style:solid; width:"+(100*ps/pt)+"%";
+	    } else {
+	      po.style="border-style:solid; width:100%";
+		  pi.style="background: #4CAF50; width:"+(100*pt/ps)+"%";
+	    }
+	    pi.innerHTML=pm;
+      }
     </script>
   </body>
 

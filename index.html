@@ -6,17 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elementary Arithmetic Game</title>
     <style id="sfs">
-	  * { font-size: 3vw; text-align: center; }
+	  * { font-size: xx-large; text-align: center; }
     </style>
   </head>
-<!--font-size: xx-large;
-font-size: 1.2em; -->
   <body onload="populate()">
-    <select onchange="fs(this.value)">
-	  <option value="* { font-size: 3vw; text-align: center; }">3vw</option>
-	  <option value="* { font-size: xx-large; text-align: center; }">xx-large</option>
-	  <option value="* { font-size: 1.2em; text-align: center; }">1.2em</option>
-	</select>
     <div id="first" dir="rtl">
       <ul style="text-align:right">
         <p style="text-align:right">עדכון אחרון: 15/6/20</p>
@@ -45,10 +38,6 @@ font-size: 1.2em; -->
     <script>
       var crrntUsrNm, crrntUsr, tb, spd, lvl, st, tt, qn, lb, b, s, o, result;
       
-      function fs(fonsi){
-	  document.getElementById("sfs").innerHTML=fonsi;
-	  }
-	  
 	  function populate() {
         if (localStorage.lvl !== undefined) {
           localStorage.setItem("ראשי", JSON.stringify({

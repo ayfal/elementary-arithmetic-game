@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elementary Arithmetic Game</title>
+    <title>Working Memory Trainer</title>
     <style id="sfs">
 	  * { font-size: xx-large; text-align: center; }
     </style>
@@ -11,65 +11,39 @@
   <body onload="populate()">
     <div id="first" dir="rtl">
       <ul style="text-align:right">
-        <p style="text-align:right">עדכון אחרון: 15/7/20</p>
-        <li style="text-align:right">מטרת משחק זה היא לשפר מהירות-חישוב, זכרון-לטווח-קצר ותיאום-עין-יד.</li>
-        <li style="text-align:right">עליכם לפתור נכונה 10 תרגילים אקראיים, תוך 10 שניות לפחות.</li>
-        <li style="text-align:right">אם מצליחים, עולים שלב. בכל שלב, המספר הכי גדול שיתכן שיהיה בתרגיל הוא מספר השלב.</li>
-        <li style="text-align:right">הממוצע בין המהירות הנדרשת למהירות שהשגתם בפועל, הוא המהירות הנדרשת במשחק הבא. כך שהמשחק מסתגל למהירות שלכם, אך הוא עדיין מאתגר, ולפעמים נדרשים כמה נסיונות כדי לעבור שלב.</li>
+        <p style="text-align:right">עדכון אחרון: 6/8/20</p>
+        <li style="text-align:right">מטרת משחק זה היא לשפר את זכרון העבודה.</li>
+        <li style="text-align:right">עליכם לפתור נכונה 10 תרגילי חשבון אקראיים. אם מצליחים, עולים שלב.</li>
+        <li style="text-align:right"> בכל שלב, המספר הכי גדול שיתכן שיהיה בתרגיל הוא מספר השלב.</li>
         <li style="text-align:right">ההתקדמות נשמרת אוטומטית על המחשב שלכם.</li>
       </ul>
     </div>
     <div id="start screen">
       <p id="msg"></p>
-      <div id="history" style="display:none" ></div>
       <div dir="rtl"><label for="users">בחר משתמש:</label>
-      <select name="users" id="users" onchange="load()"></select> <span>שלב <span id="lvl"></span> </span><span>מהירות <span id="spd"></span></span>
+      <select name="users" id="users" onchange="load()"></select> <span>שלב <span id="lvl"></span> </span>
       <p>ניהול משתמשים:<button type="button" onclick="addInput()">הוסף</button><button type="button" onclick="editInput()">ערוך </button><button type="button" onclick="del()">מחק</button></p>
       <p id="inputForm" style="display:none"><input id="inputValue"></input><button id="submitUsers"></button></p></div>
       <p><button id="start" type="button" onclick="start()">התחל</button></p>
     </div>
     <div id="game screen" style="display:none">
-	  <div id="outertimer"><div id="innertimer"></div></div>
-      <p id="questions bar" style="background-color: #4CAF50">שאלות</p>
+	  <p id="questions bar" style="background-color: #4CAF50"></p>
       <p><span id="question"></span><input id="answer" type="number" style="text-align:left" value="" oninput="typing(this.value)"></p>
     </div>
     <script>
-      var crrntUsrNm, crrntUsr, tb, spd, lvl, st, tt, qn, lb, b, s, o, result;
+      var usersList, crrntUsr, pass, lvl, qn, lb, b, s, o, result;
       
       function populate() {
-        if (localStorage.lvl !== undefined) {
-          localStorage.setItem("ראשי", JSON.stringify({
-            lvl: localStorage.lvl,
-            spd: localStorage.spd
-          }));
-          localStorage.removeItem("lvl");
-          localStorage.removeItem("spd");
-        }
-        if (localStorage.length == 0) {
-          localStorage.setItem("ראשי", JSON.stringify({
-            lvl: "1",
-            spd: "10"
-          }));
-        }
-        for (var i = 0; i < localStorage.length; i++) {
-          if (JSON.parse(localStorage[localStorage.key(i)]).lvl!==undefined) document.getElementById("users").options.add(new Option(localStorage.key(i)));
-        }
+        if (localStorage.wmt == undefined) {localStorage.wmt=JSON.stringify({ראשי: 1});}
+        usersList=JSON.parse(localStorage.wmt);
+        for (u in usersList) {document.getElementById("users").options.add(new Option(u));}          
         load();
       }
 
       function load() {
-        crrntUsrNm = users.options[users.selectedIndex].value;
-        crrntUsr = JSON.parse(localStorage[crrntUsrNm]);
-        document.getElementById("lvl").innerHTML = crrntUsr.lvl;
-        document.getElementById("spd").innerHTML = crrntUsr.spd;
-        if (crrntUsr.hstry == undefined) {
-          crrntUsr.hstry = {};
-        }
-        if (crrntUsr.max == undefined) {
-          crrntUsr.max = 0;
-        }
-        crrntUsr.lvl=Number(crrntUsr.lvl);
-        crrntUsr.spd=Number(crrntUsr.spd);		
+        crrntUsr = users.options[users.selectedIndex].value;
+        lvl/*level*/ = Number(usersList[crrntUsr]);		
+        document.getElementById("lvl").innerHTML = lvl;
       }
 
       function addInput() {
@@ -81,12 +55,11 @@
       }
 
       function addUser() {
-        if (localStorage[document.getElementById("inputValue").value] == undefined) {
-          localStorage.setItem(document.getElementById("inputValue").value, JSON.stringify({
-            lvl: "1",
-            spd: "10"
-          }));
-          document.getElementById("users").options.add(new Option(document.getElementById("inputValue").value));
+        newName=document.getElementById("inputValue").value;
+        if (usersList[newName] == undefined) {
+          usersList[newName] = 1;
+          localStorage.wmt=JSON.stringify(usersList);
+          document.getElementById("users").options.add(new Option(newName));
           users.selectedIndex = users.length - 1;
           load();
           document.getElementById("inputForm").style.display = "none";
@@ -100,17 +73,19 @@
       function editInput() {
         document.getElementById("inputForm").style.display = "block";
         document.getElementById("inputValue").focus();
-        document.getElementById("inputValue").value = users.options[users.selectedIndex].value;
+        document.getElementById("inputValue").value = crrntUsr;
         document.getElementById("submitUsers").innerHTML = "ערוך";
         document.getElementById("submitUsers").onclick = editUser;
       }
 
       function editUser() {
-        if (localStorage[document.getElementById("inputValue").value] == undefined) {
-          localStorage.setItem(document.getElementById("inputValue").value, localStorage[users.options[users.selectedIndex].value]);
-          localStorage.removeItem(users.options[users.selectedIndex].value);
+        newName=document.getElementById("inputValue").value;
+        if (usersList[newName] == undefined) {
+          usersList[newName]=usersList[crrntUsr];
+          delete usersList[crrntUsr];
+          localStorage.wmt=JSON.stringify(usersList);
           document.getElementById("users").options.remove(users.selectedIndex);
-          document.getElementById("users").options.add(new Option(document.getElementById("inputValue").value));
+          document.getElementById("users").options.add(new Option(newName));
           document.getElementById("inputForm").style.display = "none";
           document.getElementById("msg").innerHTML = "המשתמש נערך";
           users.selectedIndex = users.length - 1;
@@ -122,7 +97,8 @@
       }
 
       function del() {
-        localStorage.removeItem(users.options[users.selectedIndex].value);
+        delete usersList[crrntUsr];
+        localStorage.wmt=JSON.stringify(usersList);
         document.getElementById("users").options.remove(users.selectedIndex);
         document.getElementById("msg").innerHTML = "המשתמש נמחק";
         document.getElementById("inputForm").style.display = "none";
@@ -132,22 +108,18 @@
       function start() {	  
         document.getElementById("first").style.display = "none";
         document.getElementById("start screen").style.display = "none";
-        document.getElementById("history").style.display = "none";
-        document.getElementById("history").innerHTML = "";
+        document.getElementById("msg").innerHTML="";
         document.getElementById("game screen").style.display = "block";
-        document.getElementById("answer").focus();
-        lvl = Number(crrntUsr.lvl);//level
-        st = Date.now(); //start time
-        qn = 1; //question number
+        document.getElementById("answer").focus();        
+        st/*start time*/ = Date.now();
+        qn/*question number*/ = 1;
         newQuestion();
-        spd=Number(crrntUsr.spd)*1000;
-        tb = setInterval(timer, 10); //time bar
       }
 
       function newQuestion() {
-        lb = (lvl - 9 > 1) ? lvl - 9 : 1; //lower bound
-        b = Math.floor((lvl - lb + 1) * Math.random() + lb); //big number
-        s = Math.floor((b / 2) * Math.random() + 1); //small number
+        lb/*lower bound*/ = (lvl - 9 > 1) ? lvl - 9 : 1;
+        b/*big number*/ = Math.floor((lvl - lb + 1) * Math.random() + lb);
+        s/*small number*/ = Math.floor((b / 2) * Math.random() + 1);
         operator = Math.floor(4 * Math.random() + 1);
         switch (operator) {
           case 1:
@@ -167,99 +139,39 @@
             result = Math.floor(b / s);
         }
         document.getElementById("questions bar").style.width = 10 * qn + '%';
-      }
-
-      function timer() {
-        timebar(outertimer,innertimer,Date.now() - st,spd,"זמן");
+        document.getElementById("questions bar").innerHTML="שאלה "+qn;
       }
 
       function typing(answer) {
-        question = document.getElementById("question").innerHTML;
         if (result.toString().includes(answer) == false) {
           document.getElementById("answer").value = "";
-          if (question.indexOf("=") == question.length - 1) {
-            document.getElementById("question").innerHTML += result;
-          }
+          document.getElementById("msg").innerHTML+="<p>"+document.getElementById("question").innerHTML+result+"</p>";
+          pass=false;
+          end();          
         } else if (answer == result) {
           document.getElementById("answer").value = "";
-          if (question.indexOf("=") == question.length - 1) {
-            qn++;
-          }
+          qn++;
           if (qn < 11) {
             newQuestion()
           } else {
+            pass=true;
             end()
           }
         }
       }
 
-      function end() {        
-        tt = (Date.now() - st) / 1000; //total time
-        spd=crrntUsr.spd;
-        crrntUsr.hstry[String(Object.keys(crrntUsr.hstry).length)] = {
-          s: spd,
-          t: tt
-        };
-        crrntUsr.max = Math.max(crrntUsr.max, spd, tt);        
-        clearInterval(tb);
+      function end() {
         document.getElementById("game screen").style.display = "none";
-        document.getElementById("msg").innerHTML = (tt <= spd) ? "עלית לשלב " + (crrntUsr.lvl+1) : "נשארת בשלב "+ crrntUsr.lvl;
-        var outsider=document.createElement("div");
-        var insider=document.createElement("div");
-        timebar(outsider,insider,tt,spd,"המהירות שלך היתה " + tt + "/" + spd);
-        outsider.appendChild(insider);
-        document.getElementById("msg").appendChild(outsider);
-        var outsider=document.createElement("div");
-        outsider.style="border-style:solid; background: #ffcc66; width:"+(100*(spd+tt)/(2*Math.max(spd,tt)))+"%";
-        outsider.innerHTML="המהירות החדשה היא " + (Math.round(((spd+tt)/2)*1000))/1000;
-        document.getElementById("msg").appendChild(outsider);
+        document.getElementById("msg").innerHTML += (pass) ? "עלית לשלב " + (lvl+1) : "נשארת בשלב "+ lvl;
         document.getElementById("start screen").style.display = "block";        
         document.getElementById("start").focus();
-        if (tt <= spd) {
-          crrntUsr.lvl++;
-          if (lvl % 10 == 0) {
-            msg.innerHTML = "סיימת עשרה שלבים, כל הכבוד! להלן תוצאות המשחקים שלהם";
-            document.getElementById("msg").focus();
-            document.getElementById("history").style.display = "block";			
-            for (game in crrntUsr.hstry) {
-              var outsider=document.createElement("div");
-              var insider=document.createElement("div");
-              if (crrntUsr.hstry[game].t>crrntUsr.hstry[game].s){			  
-                outsider.style="background: #FF6347; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.max)+"%";
-                insider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.hstry[game].t)+"%";
-              } else {
-                outsider.style="border-style:solid; width:"+(100*crrntUsr.hstry[game].s/crrntUsr.max)+"%";
-                insider.style="background: #4CAF50; width:"+(100*crrntUsr.hstry[game].t/crrntUsr.hstry[game].s)+"%";
-              }
-              insider.innerHTML=crrntUsr.hstry[game].t+"/"+crrntUsr.hstry[game].s;			  
-              outsider.appendChild(insider);
-              document.getElementById("history").appendChild(outsider);
-            }
-            crrntUsr.hstry = {};
-            crrntUsr.max = 0;
-          }
+        if (pass) {
+          usersList[crrntUsr]=lvl+1;
+          localStorage.wmt = JSON.stringify(usersList);
         }
-        crrntUsr.spd = (Math.round(((spd + tt) / 2) * 1000)) / 1000;
-        if (typeof(Storage) !== "undefined") {
-          localStorage[crrntUsrNm] = JSON.stringify(crrntUsr);
-          load();
-        } else {
-          document.getElementById("msg").innerHTML = "אין אפשרות לשמור את ההתקדמות";
-        }
-      }
-      
-      function timebar(po,pi,pt,ps,pm){
-        if (pt>ps){
-          po.style="background: #FF6347; width:100%";
-          pi.style="border-style:solid; width:"+(100*ps/pt)+"%";
-        } else {
-          po.style="border-style:solid; width:100%";
-          pi.style="background: #4CAF50; width:"+(100*pt/ps)+"%";
-        }
-        pi.innerHTML=pm;
-      }
+        load();        
+      }      
 </script>
-<script data-goatcounter="https://ayfalgh.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+<script data-goatcounter="https://ayfalgh.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

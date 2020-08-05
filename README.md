@@ -1,4 +1,2 @@
 # Elementary-Arithmetic
-A game for practicing Elementary Arithmetic
-
-Inspired by https://arithmetic.zetamac.com
+A game for training working memory by practicing elementary arithmetic

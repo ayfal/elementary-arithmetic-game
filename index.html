@@ -13,8 +13,8 @@
       <ul style="text-align:right">
         <p style="text-align:right">עדכון אחרון: 6/8/20</p>
         <li style="text-align:right">מטרת משחק זה היא לשפר את זכרון העבודה.</li>
-        <li style="text-align:right">עליכם לפתור נכונה 10 תרגילי חשבון אקראיים. אם מצליחים, עולים שלב.</li>
-        <li style="text-align:right"> בכל שלב, המספר הכי גדול שיתכן שיהיה בתרגיל הוא מספר השלב.</li>
+        <li style="text-align:right">בכל שלב יש לפתור נכונה 10 תרגילי חשבון אקראיים.</li>
+        <li style="text-align:right">המספר הכי גדול שיתכן שיהיה בתרגיל הוא מספר השלב.</li>
         <li style="text-align:right">ההתקדמות נשמרת אוטומטית על המחשב שלכם.</li>
       </ul>
     </div>
@@ -22,7 +22,8 @@
       <p id="msg"></p>
       <div dir="rtl"><label for="users">בחר משתמש:</label>
       <select name="users" id="users" onchange="load()"></select> <span>שלב <span id="lvl"></span> </span>
-      <p>ניהול משתמשים:<button type="button" onclick="addInput()">הוסף</button><button type="button" onclick="editInput()">ערוך </button><button type="button" onclick="del()">מחק</button></p>
+      <!--<p>ניהול משתמשים:<button type="button" onclick="addInput()">הוסף</button><button type="button" onclick="editInput()">ערוך </button><button type="button" onclick="del()">מחק</button></p>-->
+      <p><button type="button" onclick="addInput()">הוסף משתמש</button><button type="button" onclick="editInput()">ערוך משתמש</button><button type="button" onclick="del()">מחק משתמש</button></p>      
       <p id="inputForm" style="display:none"><input id="inputValue"></input><button id="submitUsers"></button></p></div>
       <p><button id="start" type="button" onclick="start()">התחל</button></p>
     </div>

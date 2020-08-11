@@ -21,8 +21,9 @@
     <div id="start screen">
       <p id="msg"></p>
       <div dir="rtl"><label for="users">בחר משתמש:</label>
-      <select name="users" id="users" onchange="load()"></select> <span>שלב <span id="lvl"></span> </span>
-      <!--<p>ניהול משתמשים:<button type="button" onclick="addInput()">הוסף</button><button type="button" onclick="editInput()">ערוך </button><button type="button" onclick="del()">מחק</button></p>-->
+      <select name="users" id="users" onchange="load()"></select>
+	  <label for="lvl">בחר שלב:</label>
+	  <input id="lvl" type="number">
       <p><button type="button" onclick="addInput()">הוסף משתמש</button><button type="button" onclick="editInput()">ערוך משתמש</button><button type="button" onclick="del()">מחק משתמש</button></p>      
       <p id="inputForm" style="display:none"><input id="inputValue"></input><button id="submitUsers"></button></p></div>
       <p><button id="start" type="button" onclick="start()">התחל</button></p>
@@ -43,8 +44,7 @@
 
       function load() {
         crrntUsr = users.options[users.selectedIndex].value;
-        lvl/*level*/ = Number(usersList[crrntUsr]);		
-        document.getElementById("lvl").innerHTML = lvl;
+		document.getElementById("lvl").value =Number(usersList[crrntUsr]);
       }
 
       function addInput() {
@@ -114,6 +114,7 @@
         document.getElementById("answer").focus();        
         st/*start time*/ = Date.now();
         qn/*question number*/ = 1;
+		lvl/*level*/=document.getElementById("lvl").value;
         newQuestion();
       }
 
@@ -166,10 +167,8 @@
         document.getElementById("msg").innerHTML += (pass) ? "עלית לשלב " + (lvl+1) : "נשארת בשלב "+ lvl;
         document.getElementById("start screen").style.display = "block";        
         document.getElementById("start").focus();
-        if (pass) {
-          usersList[crrntUsr]=lvl+1;
-          localStorage.wmt = JSON.stringify(usersList);
-        }
+		usersList[crrntUsr] = (pass) ? lvl+1 : lvl;
+		localStorage.wmt = JSON.stringify(usersList);
         load();        
       }      
 </script>

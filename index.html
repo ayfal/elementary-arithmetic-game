@@ -44,7 +44,7 @@
 
       function load() {
         crrntUsr = users.options[users.selectedIndex].value;
-		document.getElementById("lvl").value =Number(usersList[crrntUsr]);
+		document.getElementById("lvl").value = usersList[crrntUsr];
       }
 
       function addInput() {
@@ -114,7 +114,8 @@
         document.getElementById("answer").focus();        
         st/*start time*/ = Date.now();
         qn/*question number*/ = 1;
-		lvl/*level*/=document.getElementById("lvl").value;
+		lvl/*level*/=Number(document.getElementById("lvl").value);
+		alert(typeof(lvl));
         newQuestion();
       }
 

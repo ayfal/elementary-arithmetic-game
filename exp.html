@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="he">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working Memory Trainer</title>
+    <style id="sfs">
+	  * { font-size: xx-large; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <p id="msg">מטרת משחק זה היא להגדיל את רמת המורכבות של בעיות שביכולתכם לפתור</p>
+    <p><button id="start" type="button" onclick="start()" autofocus>התחל</button></p>
+    <p id="exercise" style="display:none"><span id="question"></span><input id="answer" type="number" style="text-align:left" value="" oninput="typing(this.value)"></p>
+    <script>
+      var usersList, crrntUsr, pass, lvl, lb, b, s, o, result;
+      
+      function start() {
+        document.getElementById("start").style.display = "none";
+        document.getElementById("exercise").style.display = "block";
+        document.getElementById("answer").focus();
+		lvl/*level*/=1;
+        newQuestion();
+      }
+
+      function newQuestion() {
+        lb/*lower bound*/ = 10**(lvl-1);
+		ub/*upper bound*/ = (10**lvl)-1;
+		b/*big number*/ = Math.floor((ub - lb + 1) * Math.random() + lb);
+        s/*small number*/ = Math.floor((b / 2) * Math.random() + 1);
+        operator = Math.floor(4 * Math.random() + 1);
+        switch (operator) {
+          case 1:
+            document.getElementById("question").innerHTML = s + "+" + (b - s) + "=";
+            result = b;
+            break;
+          case 2:
+            document.getElementById("question").innerHTML = b + "-" + s + "=";
+            result = b - s;
+            break;
+          case 3:
+            document.getElementById("question").innerHTML = Math.floor(b / s) + "×" + s + "=";
+            result = Math.floor(b / s) * s;
+            break;
+          case 4:
+            document.getElementById("question").innerHTML = Math.floor(b / s) * s + ":" + s + "="; //÷
+            result = Math.floor(b / s);
+        }
+		document.getElementById("answer").value = "";
+        document.getElementById("msg").innerHTML="רמה "+lvl;
+      }
+
+      function typing(answer) {
+        if (result.toString().includes(answer) == false) {
+		  end();          
+        } else if (answer == result) {
+          lvl++;
+		  newQuestion();
+        }
+      }
+
+      function end() {
+        document.getElementById("msg").innerHTML=document.getElementById("question").innerHTML+result;
+        document.getElementById("exercise").style.display = "none";
+        document.getElementById("start").style.display = "initial";
+        document.getElementById("start").focus();
+      }      
+</script>
+<script data-goatcounter="https://ayfalgh.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

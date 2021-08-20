@@ -127,23 +127,23 @@
         switch (operator) {
           case 1:
             document.getElementById("question").innerHTML = s + "+" + (b - s) + "=";
-			document.getElementById("worded").innerHTML ="לילד היו " + s + " סוכריות. נתנו לו עוד " + (b-s) + " סוכריות. כמה סוכריות יש לו?";
+			document.getElementById("worded").innerHTML ="לילד היו " + s + " סוכריות. נתנו לו עוד " + (b-s) + " סוכריות. כמה סוכריות יש לו";
             result = b;
             break;
           case 2:
             document.getElementById("question").innerHTML = b + "-" + s + "=";
-			document.getElementById("worded").innerHTML ="לילד היו " + b + " סוכריות. הוא אכל " + s + " סוכריות. כמה סוכריות נשארו לו?";
+			document.getElementById("worded").innerHTML ="לילד היו " + b + " סוכריות. הוא אכל " + s + " סוכריות. כמה סוכריות נשארו לו";
             result = b - s;
             break;
           case 3:
             document.getElementById("question").innerHTML = Math.floor(b / s) + "×" + s + "=";
-			document.getElementById("worded").innerHTML = "לילד יש " + Math.floor(b/s) + " שקיות. בכל שקית יש " + s + " סוכריות. כמה סוכריות יש לו?";
+			document.getElementById("worded").innerHTML = "לילד יש " + Math.floor(b/s) + " שקיות. בכל שקית יש " + s + " סוכריות. כמה סוכריות יש לו";
             result = Math.floor(b / s) * s;
             break;
           case 4:
             //document.getElementById("question").innerHTML = Math.floor(b / s) * s + ":" + s + "="; //÷
 			document.getElementById("question").innerHTML = b + ":" + s + "="; //÷
-			document.getElementById("worded").innerHTML ="לילד יש " + b + "סוכריות. הוא חילק אותן ל " + s + "שקיות. כמה סוכריות יש בכל שקית?";
+			document.getElementById("worded").innerHTML ="לילד יש " + b + " סוכריות. הוא חילק אותן ל " + s + "שקיות. כמה סוכריות יש בכל שקית";
             result = Math.floor(b / s);
         }
         //document.getElementById("questions bar").style.width = 10 * qn + '%';

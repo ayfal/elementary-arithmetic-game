@@ -11,7 +11,7 @@
   <body onload="populate()">
     <div id="first" dir="rtl">
       <ul style="text-align:right">
-        <p style="text-align:right">עדכון אחרון: 2/12/20</p>
+        <p style="text-align:right">עדכון אחרון: 20/8/21</p>
         <li style="text-align:right">בכל שלב יש לפתור נכונה 10 תרגילי חשבון אקראיים.</li>
         <li style="text-align:right">המספר הכי גדול שיתכן שיהיה בתרגיל הוא מספר השלב.</li>
         <li style="text-align:right">ההתקדמות נשמרת אוטומטית על המחשב שלכם.</li>
@@ -30,8 +30,9 @@
     <div id="game screen" style="display:none">
 	<!--background-color: #4CAF50-->
 	  <p id="questions bar" style="background-image:url('http://picsum.photos/500'); background-repeat:no-repeat;"></p>
-      <p><span id="question"></span><input id="answer" type="number" style="text-align:left" value="" oninput="typing(this.value)"></p>
-	    <p id=worded></p>
+      <p id=worded></p>
+	  <p><span id="question"></span><input id="answer" type="number" style="text-align:left" value="" oninput="typing(this.value)"></p>
+	    
     </div>
     <script>
       var usersList, crrntUsr, pass, lvl, qn, lb, b, s, o, result, ims;
@@ -127,23 +128,23 @@
         switch (operator) {
           case 1:
             document.getElementById("question").innerHTML = s + "+" + (b - s) + "=";
-			document.getElementById("worded").innerHTML ="לילד היו " + s + " סוכריות. נתנו לו עוד " + (b-s) + " סוכריות. כמה סוכריות יש לו";
+			document.getElementById("worded").innerHTML ="לילד היו " + s + " סוכריות<br>נתנו לו עוד " + (b-s) + " סוכריות<br>			כמה סוכריות יש לו";
             result = b;
             break;
           case 2:
             document.getElementById("question").innerHTML = b + "-" + s + "=";
-			document.getElementById("worded").innerHTML ="לילד היו " + b + " סוכריות. הוא אכל " + s + " סוכריות. כמה סוכריות נשארו לו";
+			document.getElementById("worded").innerHTML ="לילד היו " + b + " סוכריות<br>הוא אכל " + s + " סוכריות<br>כמה סוכריות נשארו לו";
             result = b - s;
             break;
           case 3:
             document.getElementById("question").innerHTML = Math.floor(b / s) + "×" + s + "=";
-			document.getElementById("worded").innerHTML = "לילד יש " + Math.floor(b/s) + " שקיות. בכל שקית יש " + s + " סוכריות. כמה סוכריות יש לו";
+			document.getElementById("worded").innerHTML = "לילד יש " + Math.floor(b/s) + " שקיות<br>בכל שקית יש " + s + " סוכריות<br>	 כמה סוכריות יש לו";
             result = Math.floor(b / s) * s;
             break;
           case 4:
             //document.getElementById("question").innerHTML = Math.floor(b / s) * s + ":" + s + "="; //÷
 			document.getElementById("question").innerHTML = b + ":" + s + "="; //÷
-			document.getElementById("worded").innerHTML ="לילד יש " + b + " סוכריות. הוא חילק אותן ל " + s + "שקיות. כמה סוכריות יש בכל שקית";
+			document.getElementById("worded").innerHTML ="לילד יש " + b + " סוכריות<br>הוא חילק אותן ל " + s + " שקיות<br>כמה סוכריות יש בכל שקית";
             result = Math.floor(b / s);
         }
         //document.getElementById("questions bar").style.width = 10 * qn + '%';

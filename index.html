@@ -126,7 +126,7 @@
 		lb/*lower bound*/ = (lvl - 9 > 1) ? lvl - 9 : 1;
         b/*big number*/ = Math.floor((lvl - lb + 1) * Math.random() + lb);
         s/*small number*/ = Math.floor((b / 2) * Math.random() + 1);
-        operator = Math.floor(4 * Math.random() + 1);
+        operator = Math.floor(3 * Math.random() + 1);
         switch (operator) {
           case 1:
             document.getElementById("question").innerHTML = s + "+" + (b - s) + "=";
@@ -146,7 +146,7 @@
           case 4:
             //document.getElementById("question").innerHTML = Math.floor(b / s) * s + ":" + s + "="; //÷
 			document.getElementById("question").innerHTML = b + ":" + s + "="; //÷
-			document.getElementById("worded").innerHTML ="לילד יש " + b + " סוכריות, הוא שם " + s + " סוכריות בכל חבילה, כמה חבילות יש לו?";
+			document.getElementById("worded").innerHTML ="לילד יש " + b + " סוכריות, הוא שם " + s + " סוכריות בכל חבילה, כמה חבילות מלאות יש לו?";
             result = Math.floor(b / s);
         }
       }

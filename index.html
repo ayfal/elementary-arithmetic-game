@@ -140,13 +140,13 @@
             break;
           case 3:
             document.getElementById("question").innerHTML = Math.floor(b / s) + "×" + s + "=";
-			document.getElementById("worded").innerHTML = "לילד יש " + Math.floor(b/s) + " חבילות, בכל חבילה יש " + s + " סוכריות, כמה סוכריות יש לו?";
+			document.getElementById("worded").innerHTML = "לילד יש " + Math.floor(b/s) + " שקיות, בכל שקית יש " + s + " סוכריות, כמה סוכריות יש לו?";
             result = Math.floor(b / s) * s;
             break;
           case 4:
             //document.getElementById("question").innerHTML = Math.floor(b / s) * s + ":" + s + "="; //÷
 			document.getElementById("question").innerHTML = b + ":" + s + "="; //÷
-			document.getElementById("worded").innerHTML ="לילד יש " + b + " סוכריות, הוא שם " + s + " סוכריות בכל חבילה, כמה חבילות מלאות יש לו?";
+			document.getElementById("worded").innerHTML ="לילד יש " + b + " סוכריות, הוא שם " + s + " סוכריות בכל שקית, כמה שקיות מלאות יש לו?";
             result = Math.floor(b / s);
         }
       }

@@ -12,13 +12,14 @@
     <div id="first" dir="rtl">
       <ul style="text-align:right">
         <p style="text-align:right">עדכון אחרון: 20/8/21</p>
-        <li style="text-align:right">בכל שלב יש לפתור נכונה 10 תרגילי חשבון אקראיים.</li>
+        <li style="text-align:right">בכל שלב יש לפתור תרגיל חשבון אקראי.</li>
         <li style="text-align:right">המספר הכי גדול שיתכן שיהיה בתרגיל הוא מספר השלב.</li>
         <li style="text-align:right">ההתקדמות נשמרת אוטומטית על המחשב שלכם.</li>
       </ul>
     </div>
     <div id="start screen">
       <p id="msg"></p>
+      <p id="questions bar" style="background-image:url('http://picsum.photos/500'); background-repeat:no-repeat; background-position: center center;">    
       <div dir="rtl"><label for="users">בחר משתמש:</label>
       <select name="users" id="users" onchange="load()"></select>
 	  <label for="lvl">בחר שלב:</label>
@@ -29,7 +30,7 @@
     </div>
     <div id="game screen" style="display:none">
 	<!--background-color: #4CAF50-->
-	  <p id="questions bar" style="background-image:url('http://picsum.photos/500'); background-repeat:no-repeat;"></p>      
+	  <!-- <p id="questions bar" style="background-image:url('http://picsum.photos/500'); background-repeat:no-repeat;"></p>       -->
 	  <p><span id="question"></span><input id="answer" type="number" style="text-align:left" value="" oninput="typing(this.value)"></p>	  
 	  <p id=worded dir="rtl"></p>
     </div>
@@ -41,7 +42,7 @@
         usersList=JSON.parse(localStorage.wmt);
         for (u in usersList) {document.getElementById("users").options.add(new Option(u));}          
         load();
-		ims=500;
+		ims=300;
       }
 
       function load() {
@@ -114,15 +115,15 @@
         document.getElementById("msg").innerHTML="";
         document.getElementById("game screen").style.display = "block";
         document.getElementById("answer").focus();        
-        qn/*question number*/ = 1;
+        //qn/*question number*/ = 1;
 		lvl/*level*/=Number(document.getElementById("lvl").value);		
 		newQuestion();
       }
 
       function newQuestion() {	  
         //document.getElementById("questions bar").style.width = 10 * qn + '%';
-		document.getElementById("questions bar").style.height = 50 * qn + 'px';
-        document.getElementById("questions bar").innerHTML="שאלה "+qn;
+		//document.getElementById("questions bar").style.height = 50 * qn + 'px';
+        //document.getElementById("questions bar").innerHTML="שאלה "+qn;
 		lb/*lower bound*/ = (lvl - 9 > 1) ? lvl - 9 : 1;
         b/*big number*/ = Math.floor((lvl - lb + 1) * Math.random() + lb);
         s/*small number*/ = Math.floor((b / 2) * Math.random() + 1);
@@ -159,18 +160,19 @@
           end();          
         } else if (answer == result) {
           document.getElementById("answer").value = "";
-          qn++;
-          if (qn < 11) {			
-            newQuestion();
+        //   qn++;
+        //   if (qn < 11) {			
+        //     newQuestion();
 			
-          } else {
+        //   } else {
             pass=true;
 			ims+=1;
 		    document.getElementById("questions bar").style.backgroundImage="url('http://picsum.photos/"+ims+"')";
+            document.getElementById("questions bar").style.height = ims + 'px';
 			end()
           }
         }
-      }
+    //   }
 
       function end() {
         document.getElementById("game screen").style.display = "none";

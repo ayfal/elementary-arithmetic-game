@@ -173,6 +173,7 @@
             if (result.toString().includes(answer) == false) {
                 document.getElementById("answer").value = "";
                 document.getElementById("msg").innerHTML += "<p>" + document.getElementById("question").innerHTML + result + "</p>";
+                document.getElementById("msg").dir = "ltr";
                 pass = false;
                 end();
             } else if (answer == result) {

@@ -36,7 +36,7 @@
         </div>
     </div>
     <div id="start screen" dir="rtl">
-        <p id="msg"></p>
+        <p id="msg" dir="ltr"></p>
         <p id="questions bar" style="background-repeat:no-repeat; background-position: center center;"></p>
         <label for="lvl">בחר שלב:</label>
         <input id="lvl" type="number">
@@ -173,7 +173,6 @@
             if (result.toString().includes(answer) == false) {
                 document.getElementById("answer").value = "";
                 document.getElementById("msg").innerHTML += "<p>" + document.getElementById("question").innerHTML + result + "</p>";
-                document.getElementById("msg").dir = "ltr";
                 pass = false;
                 end();
             } else if (answer == result) {
